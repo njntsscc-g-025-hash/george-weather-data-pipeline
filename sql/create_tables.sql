@@ -28,4 +28,3 @@ CREATE TABLE IF NOT EXISTS weather_clean (
     CONSTRAINT nonnegative_wind_speed
         CHECK (wind_speed IS NULL OR wind_speed >= 0)
 );
-
