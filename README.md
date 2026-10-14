@@ -98,7 +98,7 @@ airflow db migrate
 export AIRFLOW__CORE__DAGS_FOLDER=$PWD/dags
 airflow standalone
 ```
-Open http://localhost:8501-style Airflow UI at http://localhost:8080, unpause `george_weather_hourly`, and it runs every hour.
+Open the Airflow UI at http://localhost:8080, unpause `george_weather_hourly`, and it runs every hour.
 
 **5. Dashboard** (separate environment, to avoid dependency clashes with Airflow)
 ```bash
