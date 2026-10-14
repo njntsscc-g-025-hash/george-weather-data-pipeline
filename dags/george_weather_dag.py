@@ -32,7 +32,13 @@ def george_weather():
         load(payload, row)
         print("Saved!", row)
 
-    run_etl()
+    @task
+    def update_daily_summary():
+        from transform import run
+
+        run()
+
+    run_etl() >> update_daily_summary()
 
 
 george_weather()
