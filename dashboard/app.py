@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import psycopg2
 import streamlit as st
@@ -35,6 +36,19 @@ def to_local(series):
         pd.to_datetime(series, utc=True)
         .dt.tz_convert("Africa/Johannesburg")
         .dt.tz_localize(None)
+    )
+
+
+def trend_chart(df, column, label):
+    data = df.reset_index()
+    return (
+        alt.Chart(data)
+        .mark_line(point=True)
+        .encode(
+            x=alt.X("observed_at:T", title="Time (George)"),
+            y=alt.Y(f"{column}:Q", title=label, scale=alt.Scale(zero=False)),
+            tooltip=["observed_at:T", f"{column}:Q"],
+        )
     )
 
 
@@ -83,10 +97,10 @@ recent["observed_at"] = to_local(recent["observed_at"])
 recent = recent.set_index("observed_at")
 
 st.subheader("Temperature, last 7 days")
-st.line_chart(recent["temp_c"], y_label="°C")
+st.altair_chart(trend_chart(recent, "temp_c", "°C"), width="stretch")
 
 st.subheader("Humidity trend, last 7 days")
-st.line_chart(recent["humidity"], y_label="%")
+st.altair_chart(trend_chart(recent, "humidity", "%"), width="stretch")
 
 st.subheader("Daily summary")
 st.dataframe(daily, width="stretch", hide_index=True)
